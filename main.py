@@ -1,6 +1,7 @@
 import logging
 import atexit
 import cleverbotfree.cbfree
+from telegram import ChatAction
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 cb = cleverbotfree.cbfree.Cleverbot()
@@ -16,7 +17,9 @@ dispatcher = updater.dispatcher
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Hi, I'm that one dumb friend that is always there to talk with you. ;)")
+                             text="Hi 🙂,\n\n"
+                                  "I am RecVel, a simple blabbering bot.\n\n"
+                                  "I won't read your messages unless you @ me 😩\n - @RecVel_bot")
 
 
 start_handler = CommandHandler('start', start)
@@ -25,13 +28,19 @@ dispatcher.add_handler(start_handler)
 
 def chat(update, context):
     cb.get_form()
-    cb.send_input(update.message.text)
-    response = cb.get_response()
-    context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+    received_msg = update.message.text
+
+    if '@RecVel_bot' in received_msg:
+        context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
+        cb.send_input(received_msg.replace('@RecVel_bot', ''))
+        response = cb.get_response()
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response,
+                                 reply_to_message_id=update.message.message_id)
 
 
 def exit_handler():
     cb.browser.close()
+    print("exited bot")
 
 
 atexit.register(exit_handler)
@@ -40,3 +49,4 @@ echo_handler = MessageHandler(Filters.text & (~Filters.command), chat)
 dispatcher.add_handler(echo_handler)
 
 updater.start_polling()
+print("Started bot")
