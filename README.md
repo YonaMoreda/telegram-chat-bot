@@ -2,6 +2,8 @@
 
 A simple bot using telegram API to direct messages to and from [Cleverbot](https://www.cleverbot.com/) AI chatterbot.
 
+![image](chat-bot-demo.gif)
+
 ## Requirements
 The following items are required to be installed in the system:
 Python 3, `pip`, FireFox and finally`geckodriver.exe` is downloaded and added as system path variable.
