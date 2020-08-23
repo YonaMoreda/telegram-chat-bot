@@ -1,8 +1,13 @@
 import logging
 import atexit
+import configparser
 import cleverbotfree.cbfree
 from telegram import ChatAction
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+config = configparser.ConfigParser()
+config.read('configuration.ini')
+
 
 cb = cleverbotfree.cbfree.Cleverbot()
 cb.browser.get(cb.url)
@@ -10,7 +15,7 @@ cb.browser.get(cb.url)
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-bot_token = '1210596258:AAHoV9p4zpsj9nF0A5Lvg9Ft7-k4MMyZ2_E'
+bot_token = config['TOKEN']['BotToken']
 updater = Updater(token=bot_token, use_context=True)
 dispatcher = updater.dispatcher
 
